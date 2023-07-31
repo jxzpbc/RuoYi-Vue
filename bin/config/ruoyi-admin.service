@@ -1,0 +1,8 @@
+[Unit]
+Description=ruoyi-admin
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStart=/bin/java -jar -Ddruid.mysql.usePingMethod=false /root/jars/ruoyi-admin.jar --server.port=38500
+[Install]
+WantedBy=multi-user.target
