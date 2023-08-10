@@ -54,7 +54,7 @@ spring:
     # 国际化资源文件路径
     basename: i18n/messages
   profiles:
-    active: druid
+    active: local
   # 文件上传
   servlet:
     multipart:
@@ -126,6 +126,6 @@ xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）
-  excludes: /system/notice
+  excludes: /system/notice,/system/test
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
