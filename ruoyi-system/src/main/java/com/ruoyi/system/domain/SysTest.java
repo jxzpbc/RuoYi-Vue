@@ -32,19 +32,36 @@ public class SysTest extends BaseEntity
     /** 公告状态（0正常 1关闭） */
     private String status;
 
-    public Long getid()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setid(Long id)
-    {
-        this.id =  id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void settitle(String title)
-    {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Xss(message = "公告标题不能包含脚本字符")
@@ -88,10 +105,10 @@ public class SysTest extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getid())
-            .append("title", gettitle())
-            .append("type", gettype())
-            .append("content", getcontent())
+            .append("id", getId())
+            .append("title", getTitle())
+            .append("type", getType())
+            .append("content", getContent())
             .append("status", getStatus())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
