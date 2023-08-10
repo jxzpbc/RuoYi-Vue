@@ -40,54 +40,36 @@ public class SysTest extends BaseEntity
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     @Xss(message = "公告标题不能包含脚本字符")
     @NotBlank(message = "公告标题不能为空")
     @Size(min = 0, max = 50, message = "公告标题不能超过50个字符")
-    public String gettitle()
+    public String getTitle()
     {
         return title;
     }
 
-    public void settype(String type)
+    public void setTitle(String title) {this.title = title;}
+
+    public void setType(String type)
     {
         this.type = type;
     }
 
-    public String gettype()
+    public String getType()
     {
         return type;
     }
 
-    public void setcontent(String content)
+    public void setContent(String content)
     {
         this.content = content;
     }
 
-    public String getcontent()
+    public String getContent()
     {
         return content;
     }
