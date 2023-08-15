@@ -28,8 +28,24 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="测试富文本">
-        <editor min-height="192"/>
+      <el-form-item label="数字计数框最大值" prop="num">
+      <el-input-number v-model="numRange" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
+      </el-form-item>
+      <el-form-item label="数字计数框最小值" prop="num">
+        <el-input-number v-model="numRange" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
+      </el-form-item>
+        <el-form-item label="查询时间" prop="dateTime">
+          <div class="block">
+            <el-date-picker
+              v-model="dateTimeRange"
+              type="datetimerange"
+              style="width: 240px"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -158,9 +174,37 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="数字计数框" prop="num">
+              <el-input-number v-model="form.num" controls-position="right" @change="handleChange" :min="1" :max="100"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="小数数字计数框" prop="point">
+              <el-input-number v-model="form.point" :precision="2" :step="0.1" :max="100"></el-input-number>
+            </el-form-item>
+          </el-col>
           <el-col :span="24">
             <el-form-item label="内容">
               <editor v-model="form.content" :min-height="192"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="时间">
+              <el-date-picker
+                v-model="form.dateTime"
+                type="datetime"
+                placeholder="选择日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="多图">
+              <image-upload
+                v-model="form.images"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -175,12 +219,25 @@
 
 <script>
 import { listTest, getTest, delTest, addTest, updateTest } from "@/api/system/test";
+import ImageUpload from "@/components/ImageUpload/index.vue";
+import {parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree} from "@/utils/ruoyi"
 
 export default {
   name: "Test",
   dicts: ['sys_test_status', 'sys_test_type'],
+  components: {
+    ImageUpload
+  },
   data() {
     return {
+      //计数数字
+      num: 1,
+      //计数小数数字
+      point: 1,
+      //日期时间范围选择器
+      dateTimeRange: [],
+      //数字范围选择器
+      numRange: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -228,13 +285,21 @@ export default {
     /** 查询公告列表 */
     getList() {
       this.loading = true;
+      this.addMyDateTimeRange()
       listTest(this.queryParams).then(response => {
         this.testList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
     },
-    // 取消按钮
+    addMyDateTimeRange(){
+      this.queryParams.params = {}
+      let dateTimeRange = Array.isArray(this.dateTimeRange) ? this.dateTimeRange : [];
+      this.queryParams.params.beginDateTime = dateTimeRange[0]
+      this.queryParams.params.endDateTime = dateTimeRange[1]
+      console.log(this.queryParams)
+    },
+      // 取消按钮
     cancel() {
       this.open = false;
       this.reset();
@@ -312,6 +377,9 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
+    },
+    /** 整数计数按钮*/
+    handleChange(value) {
     }
   }
 };
