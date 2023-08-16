@@ -29,9 +29,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数字范围搜索">
-        <el-input-number v-model="queryParams.params.minNum" controls-position="right" @change="handleMinChange" ></el-input-number>
+        <el-input-number v-model="queryParams.params.minNum" controls-position="right" ></el-input-number>
         ~
-        <el-input-number v-model="queryParams.params.maxNum" controls-position="right" @change="handleMaxChange" ></el-input-number>
+        <el-input-number v-model="queryParams.params.maxNum" controls-position="right"  ></el-input-number>
       </el-form-item>
         <el-form-item label="查询时间" prop="dateTime">
           <div class="block">
@@ -219,7 +219,6 @@
 <script>
 import { listTest, getTest, delTest, addTest, updateTest } from "@/api/system/test";
 import ImageUpload from "@/components/ImageUpload/index.vue";
-import {parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree} from "@/utils/ruoyi"
 
 export default {
   name: "Test",
@@ -279,7 +278,6 @@ export default {
     };
   },
   created() {
-    console.log(this.$store);
     this.getList();
   },
   methods: {
@@ -371,27 +369,12 @@ export default {
       const ids = row.id || this.ids
       this.$modal.confirm('是否确认删除公告编号为"' + ids + '"的数据项？').then(function() {
         return delTest(ids);
-        console.log(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
     handleChange(value) {
-    },
-    /** 整数计数按钮*/
-    handleMinChange() {this.verification()
-    },
-    handleMaxChange() {this.verification()
-    },
-    //字段验证
-    verification(){
-      if(this.queryParams.params.minNum>this.queryParams.params.maxNum){
-        this.$message.warning("起始数不能大于结束数");
-        return false;
-      }else{
-        return true;
-      }
     },
   }
 };
