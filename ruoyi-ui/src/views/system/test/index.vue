@@ -28,11 +28,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="数字计数框最大值" prop="num">
-      <el-input-number v-model="numRange" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
-      </el-form-item>
-      <el-form-item label="数字计数框最小值" prop="num">
-        <el-input-number v-model="numRange" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
+      <el-form-item label="数字范围搜索">
+        <el-input-number v-model="queryParams.params.minNum" controls-position="right" @change="handleMinChange" ></el-input-number>
+        ~
+        <el-input-number v-model="queryParams.params.maxNum" controls-position="right" @change="handleMaxChange" ></el-input-number>
       </el-form-item>
         <el-form-item label="查询时间" prop="dateTime">
           <div class="block">
@@ -236,8 +235,6 @@ export default {
       point: 1,
       //日期时间范围选择器
       dateTimeRange: [],
-      //数字范围选择器
-      numRange: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -262,7 +259,11 @@ export default {
         pageSize: 10,
         title: undefined,
         createBy: undefined,
-        status: undefined
+        status: undefined,
+        params: {
+          minNum: 1,
+          maxNum: 100,
+        }
       },
       // 表单参数
       form: {},
@@ -293,11 +294,9 @@ export default {
       });
     },
     addMyDateTimeRange(){
-      this.queryParams.params = {}
       let dateTimeRange = Array.isArray(this.dateTimeRange) ? this.dateTimeRange : [];
       this.queryParams.params.beginDateTime = dateTimeRange[0]
       this.queryParams.params.endDateTime = dateTimeRange[1]
-      console.log(this.queryParams)
     },
       // 取消按钮
     cancel() {
@@ -378,9 +377,22 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-    /** 整数计数按钮*/
     handleChange(value) {
-    }
+    },
+    /** 整数计数按钮*/
+    handleMinChange() {this.verification()
+    },
+    handleMaxChange() {this.verification()
+    },
+    //字段验证
+    verification(){
+      if(this.queryParams.params.minNum>this.queryParams.params.maxNum){
+        this.$message.warning("起始数不能大于结束数");
+        return false;
+      }else{
+        return true;
+      }
+    },
   }
 };
 </script>

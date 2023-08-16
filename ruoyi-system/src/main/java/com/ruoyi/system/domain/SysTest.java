@@ -42,9 +42,6 @@ public class SysTest extends BaseEntity
     /** 第一块的日期值 */
     private Date dateTime;
 
-    private String startTime;
-    private String endTime;
-
     /** 公告内容 */
     private String images;
 

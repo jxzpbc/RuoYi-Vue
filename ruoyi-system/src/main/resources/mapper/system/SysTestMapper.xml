@@ -49,6 +49,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endDateTime != null and params.endDateTime != ''"><!-- 结束时间检索 -->
                 AND date_format(date_time,'%y%m%d%h%i%s') &lt;= date_format(#{params.endDateTime},'%y%m%d%h%i%s')
             </if>
+            <if test="params.minNum != null and params.minNum != ''"><!-- 最小数字检索 -->
+                AND num >= #{params.minNum}
+            </if>
+            <if test="params.maxNum != null and params.maxNum != ''"><!-- 最大数字检索 -->
+                AND num &lt;= #{params.maxNum}
+            </if>
 		</where>
     </select>
     
