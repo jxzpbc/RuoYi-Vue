@@ -1,6 +1,13 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form
+      :model="queryParams"
+      :rules="queryFormRules"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px">
       <el-form-item label="测试" prop="title">
         <el-input
           v-model="queryParams.title"
@@ -28,10 +35,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="数字范围搜索">
+      <el-form-item label="数字范围搜索" prop="numCheck">
         <el-input-number v-model="queryParams.params.minNum" controls-position="right" ></el-input-number>
         ~
-        <el-input-number v-model="queryParams.params.maxNum" controls-position="right"  ></el-input-number>
+        <el-input-number v-model="queryParams.params.maxNum" controls-position="right" ></el-input-number>
       </el-form-item>
         <el-form-item label="查询时间" prop="dateTime">
           <div class="block">
@@ -227,6 +234,17 @@ export default {
     ImageUpload
   },
   data() {
+    const validateNumCheck = (rule, value, callback) => {
+      if (this.queryParams.params.minNum === '' || this.queryParams.params.minNum === undefined || this.queryParams.params.minNum === null ||
+        this.queryParams.params.maxNum === '' || this.queryParams.params.maxNum === undefined || this.queryParams.params.maxNum === null) {
+        callback();
+      } else {
+        if (this.queryParams.params.maxNum < this.queryParams.params.minNum) {
+          callback(new Error('最大数字不能小于等于最小数字'));
+        }
+        callback();
+      }
+    };
     return {
       //计数数字
       num: 1,
@@ -263,6 +281,12 @@ export default {
           minNum: 1,
           maxNum: 100,
         }
+      },
+      queryForm:{},
+      queryFormRules: {
+        numCheck: [
+          { validator: validateNumCheck, trigger: 'change' }
+        ],
       },
       // 表单参数
       form: {},
@@ -314,8 +338,18 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.$refs["queryForm"].validate(validate => {
+        if (validate) {
+          this.queryParams.pageNum = 1;
+          if (this.queryParams.params.minNum<=this.queryParams.params.maxNum ) {
+              this.$modal.msgSuccess("搜索成功");
+            this.getList();
+          }
+          else {
+            this.getList();
+          }
+        }
+      });
     },
     /** 重置按钮操作 */
     resetQuery() {
